@@ -73,6 +73,13 @@ export async function checkCurrentUserisVerified() {
   return userVerified;
 }
 
+export async function logout() {
+  await getFirebaseAuth().signOut();
+}
+export async function clearAsyncStorage() {
+  await AsyncStorage.clear();
+}
+
 export interface userDataType {
   userEmail?: string;
   userMobileNo?: string;
