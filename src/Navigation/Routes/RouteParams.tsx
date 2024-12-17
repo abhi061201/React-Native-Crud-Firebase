@@ -4,4 +4,6 @@ type RootStackParamList = {
   Onboarding: {};
   SignUpScreen: {};
   SplashScreen: {};
+  ChatScreen: {};
+  HomeScreenV1: {};
 };

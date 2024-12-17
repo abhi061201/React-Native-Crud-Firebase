@@ -18,6 +18,7 @@ import {
   verifyUserEmail,
 } from '../../Service/Firebase Service/usefirebase';
 import {CommonActions, StackActions} from '@react-navigation/native';
+import uuid from 'react-native-uuid';
 
 type SignUpProps = NativeStackScreenProps<
   RootStackParamList,
@@ -33,11 +34,13 @@ const SignUpScreen: React.FC<SignUpProps> = ({route, navigation}) => {
 
   function handleCreateAccount() {
     setLoading(true);
+    const userId = uuid.v4();
     if (password === confirmPassword) {
       createUser(email, password).then(() => {
         storeUserData({
           userEmail: email,
           userName: name,
+          userId: userId,
           otherData: {
             otherData: 'this can be anything',
           },

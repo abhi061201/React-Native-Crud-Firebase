@@ -78,6 +78,7 @@ export interface userDataType {
   userMobileNo?: string;
   userName?: string;
   otherData?: any;
+  userId?: any;
 }
 export async function storeUserData(userData: userDataType) {
   const currentUser = getUser();

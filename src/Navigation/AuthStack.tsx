@@ -7,6 +7,8 @@ import SignUpScreen from '../Components/Auth/SignUpScreen';
 import HomeScreen from '../Components/Home/HomeScreen';
 import Onboarding from '../Components/onboarding/Onboarding';
 import SplashScreen from '../Components/Splash Screen/SplashScreen';
+import ChatUi from '../Components/Feature/Chat/ChatUi';
+import HomeScreenV1 from '../Components/Home/HomeScreenV1';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +36,11 @@ const AuthStack = ({initialScreen}: {initialScreen: string}) => {
       <Stack.Screen
         name={Routes.SplashScreen}
         component={SplashScreen}></Stack.Screen>
+      <Stack.Screen name={Routes.ChatScreen} component={ChatUi}></Stack.Screen>
+      <Stack.Screen
+        name={Routes.HomeScreenV1}
+        initialParams={{}}
+        component={HomeScreenV1}></Stack.Screen>
     </Stack.Navigator>
   );
 };

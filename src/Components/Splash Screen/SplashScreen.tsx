@@ -17,7 +17,8 @@ const SplashScreen: React.FC<SplashScreenTypes> = ({route, navigation}) => {
     const timeoutid = setTimeout(() => {
       const subscribe = Auth().onAuthStateChanged(user => {
         console.log('user', JSON.stringify(user));
-        const rootPath = user !== null ? Routes.HomeScreen : Routes.LoginScreen;
+        const rootPath =
+          user !== null ? Routes.HomeScreenV1 : Routes.LoginScreen;
         subscribe();
         navigation.navigate(rootPath, {});
       });

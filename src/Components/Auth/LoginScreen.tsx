@@ -13,6 +13,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Routes} from '../../Navigation/Routes/Route';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomTextInput from '../../utils/CustomTextInput';
+import firestore from '@react-native-firebase/firestore';
 import {
   checkCurrentUserisVerified,
   signInUser,
@@ -20,16 +21,34 @@ import {
 } from '../../Service/Firebase Service/usefirebase';
 import {StackActions} from '@react-navigation/native';
 import {sendEmailVerification} from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 type LoginScreenProp = NativeStackScreenProps<
   RootStackParamList,
   Routes.LoginScreen
 >;
 
 const LoginScreen: React.FC<LoginScreenProp> = ({route, navigation}) => {
+  async function storeUserDetails(userDetails: any) {
+    console.log(
+      userDetails?.userEmail,
+      ' : ',
+      userDetails?.userId,
+      ' : ',
+      userDetails?.userName,
+    );
+    await AsyncStorage.setItem('userEmail', userDetails?.userEmail);
+    await AsyncStorage.setItem('userId', userDetails?.userId);
+    await AsyncStorage.setItem('userName', userDetails?.userName);
+    navigation.reset({
+      index: 0,
+      routes: [{name: Routes.HomeScreenV1, params: {}}],
+    });
+  }
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
-  function handleLogin() {
+  async function handleLogin() {
     setLoading(true);
     const isUserLoggedIn = signInUser(email, password);
     isUserLoggedIn.then(val => {
@@ -38,7 +57,16 @@ const LoginScreen: React.FC<LoginScreenProp> = ({route, navigation}) => {
         userVerified.then(item => {
           if (item == true) {
             console.log('Hello i am here');
-            navigation.dispatch(StackActions.replace(Routes.HomeScreen));
+            firestore()
+              .collection('Users')
+              .where('userEmail', '==', email)
+              .get()
+              .then(res => {
+                console.debug('result from server', res.docs[0]?._data);
+                const userDetails = res.docs[0]?._data;
+                console.log(userDetails, 'userDetail');
+                storeUserDetails(userDetails);
+              });
           } else {
             Alert.alert('Alert', 'Your Email is not verified ', [
               {
